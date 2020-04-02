@@ -20,6 +20,8 @@ import { GraficodonaComponent } from '../components/graficodona/graficodona.comp
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
 import { CommonModule } from '@angular/common';
+import { PromesasComponent } from './promesas/promesas.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { CommonModule } from '@angular/common';
     Graficas1Component,
     IncrementadorComponent,
     GraficodonaComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    PromesasComponent,
+    RxjsComponent
   ],
   exports: [DashboardComponent, ProgressComponent, Graficas1Component],
   imports: [SharedModule, PAGES_ROUTES, FormsModule, ChartsModule, CommonModule]
