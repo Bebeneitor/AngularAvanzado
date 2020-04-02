@@ -17,6 +17,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
 import { IncrementadorComponent } from '../components/incrementador/incrementador.component';
 import { GraficodonaComponent } from '../components/graficodona/graficodona.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
+
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,9 +28,10 @@ import { GraficodonaComponent } from '../components/graficodona/graficodona.comp
     ProgressComponent,
     Graficas1Component,
     IncrementadorComponent,
-    GraficodonaComponent
+    GraficodonaComponent,
+    AccountSettingsComponent
   ],
   exports: [DashboardComponent, ProgressComponent, Graficas1Component],
-  imports: [SharedModule, PAGES_ROUTES, FormsModule, ChartsModule]
+  imports: [SharedModule, PAGES_ROUTES, FormsModule, ChartsModule, CommonModule]
 })
 export class PagesModule {}
