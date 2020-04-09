@@ -6,7 +6,7 @@ import { APP_ROUTES } from './app.routes';
 
 // Module
 import { PagesModule } from './pages/pages.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Services
 import { ServiceModule } from './services/service.module';
@@ -18,8 +18,15 @@ import { RegisterComponent } from './login/register.component';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],
-  imports: [BrowserModule, APP_ROUTES, PagesModule, FormsModule, ServiceModule],
+  imports: [
+    BrowserModule,
+    APP_ROUTES,
+    PagesModule,
+    FormsModule,
+    ServiceModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
