@@ -19,7 +19,6 @@ export class UsuarioService {
     public route: Router,
     public _subirArchivoService: SubirArchivoService
   ) {
-    console.log('Servicio usuario listo');
     this.cargandoStorage();
   }
 
@@ -111,16 +110,21 @@ export class UsuarioService {
   actualizarUsuario(usuario: Usuario) {
     let URL = URL_SERVICIOS + '/usuario/' + usuario._id;
     URL += '?token=' + this.token;
-    console.log(URL);
 
     return this.http.put(URL, usuario).pipe(
       map((response: any) => {
+        if (usuario._id === this.usuario._id) {
+          this.guardarStorage(
+            response.usuario._id,
+            this.token,
+            response.usuario
+          );
+        }
+
         Swal.fire({
           title: 'Usuario actualizado!',
           icon: 'success',
         });
-
-        this.guardarStorage(response.usuario._id, this.token, response.usuario);
 
         return true;
       })
@@ -140,8 +144,29 @@ export class UsuarioService {
         this.usuario.img = response.usuario.img;
         this.guardarStorage(id, this.token, this.usuario);
       })
-      .catch((response) => {
-        console.log(response);
+      .catch((error) => {
+        console.log(error);
       });
+  }
+
+  cargarUsuarios(desde: number) {
+    const url = URL_SERVICIOS + '/usuario?desde=' + desde;
+
+    return this.http.get(url);
+  }
+
+  buscarUsuarios(termino: string) {
+    const url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino;
+    return this.http.get(url).pipe(map((response: any) => response.usuarios));
+  }
+
+  borrarUsuario(id: string) {
+    let url = URL_SERVICIOS + '/usuario/' + id;
+    url += '?token=' + this.token;
+    return this.http.delete(url).pipe(
+      map((response) => {
+        return true;
+      })
+    );
   }
 }

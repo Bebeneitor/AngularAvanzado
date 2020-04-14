@@ -10,10 +10,8 @@ export class LoginGuardGuard implements CanActivate {
 
   canActivate() {
     if (this._usuarioService.estaLogueado()) {
-      console.log('PARECES WINDOWS PERRO');
       return true;
     } else {
-      console.log('A CHINGAR A SU MADRE');
       this.router.navigate(['/login']);
       return false;
     }
