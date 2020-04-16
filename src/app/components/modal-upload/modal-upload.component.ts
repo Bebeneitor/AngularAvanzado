@@ -54,9 +54,14 @@ export class ModalUploadComponent implements OnInit {
         this._modalUploadService.id
       )
       .then((response) => {
-        console.log('emitiendo imagen', response);
-
         this._modalUploadService.notificacion.emit(response);
+
+        Swal.fire({
+          title: 'Actualizada! ',
+          text: 'Imagen actualizada correctamente.',
+          icon: 'success',
+        });
+
         this.cerrarModal();
       })
       .catch((error) => {

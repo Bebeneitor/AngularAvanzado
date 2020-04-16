@@ -25,6 +25,7 @@ export class SubirArchivoService {
       };
 
       const URL = URL_SERVICIOS + '/upload/' + tipo + '/' + id;
+
       xhr.open('PUT', URL, true);
       xhr.send(formData);
     });
