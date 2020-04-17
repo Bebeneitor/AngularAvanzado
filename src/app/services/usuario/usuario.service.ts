@@ -3,9 +3,11 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import Swal from 'sweetalert2';
-import { map } from 'rxjs/internal/operators/map';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { map } from 'rxjs/internal/operators/map';
+import { catchError } from 'rxjs/internal/operators/catchError';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,7 @@ import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 export class UsuarioService {
   usuario: Usuario;
   token: string;
+  menu: any = [];
 
   constructor(
     public http: HttpClient,
@@ -34,7 +37,13 @@ export class UsuarioService {
     const URL = URL_SERVICIOS + '/login/google';
     return this.http.post(URL, { token }).pipe(
       map((response: any) => {
-        this.guardarStorage(response.id, response.token, response.usuario);
+        this.guardarStorage(
+          response.id,
+          response.token,
+          response.usuario,
+          response.menu
+        );
+
         return true;
       })
     );
@@ -50,20 +59,32 @@ export class UsuarioService {
     }
 
     return this.http.post(URL, usuario).pipe(
-      map((response: any) => {
-        this.guardarStorage(response.id, response.token, response.usuario);
-        return true;
-      })
+      map(
+        (response: any) => {
+          this.guardarStorage(
+            response.id,
+            response.token,
+            response.usuario,
+            response.menu
+          );
+          return true;
+        },
+        catchError((error) => {
+          return throwError(error);
+        })
+      )
     );
   }
 
   logOut() {
     this.usuario = null;
     this.token = '';
+    this.menu = [];
 
     localStorage.removeItem('id');
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
+    localStorage.removeItem('menu');
 
     this.route.navigate(['/login']);
   }
@@ -80,30 +101,43 @@ export class UsuarioService {
     } else {
       this.usuario = null;
     }
+
+    if (localStorage.getItem('menu')) {
+      this.menu = JSON.parse(localStorage.getItem('menu'));
+    } else {
+      this.menu = [];
+    }
   }
 
-  guardarStorage(id: string, token: string, usuario: Usuario) {
+  guardarStorage(id: string, token: string, usuario: Usuario, menu: any) {
     localStorage.setItem('id', id);
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario));
+    localStorage.setItem('menu', JSON.stringify(menu));
 
     this.token = token;
     this.usuario = usuario;
+    this.menu = menu;
   }
 
   crearUsuario(usuario: Usuario) {
     const URL = URL_SERVICIOS + '/usuario';
 
     return this.http.post(URL, usuario).pipe(
-      map((response: any) => {
-        Swal.fire({
-          title: 'Usuario creado!',
-          text: usuario.email,
-          icon: 'success',
-        });
+      map(
+        (response: any) => {
+          Swal.fire({
+            title: 'Usuario creado!',
+            text: usuario.email,
+            icon: 'success',
+          });
 
-        return response.usuario;
-      })
+          return response.usuario;
+        },
+        catchError((error) => {
+          return throwError(error);
+        })
+      )
     );
   }
 
@@ -112,22 +146,23 @@ export class UsuarioService {
     URL += '?token=' + this.token;
 
     return this.http.put(URL, usuario).pipe(
-      map((response: any) => {
-        if (usuario._id === this.usuario._id) {
-          this.guardarStorage(
-            response.usuario._id,
-            this.token,
-            response.usuario
-          );
-        }
+      map(
+        (response: any) => {
+          if (usuario._id === this.usuario._id) {
+            this.guardarStorage(
+              response.usuario._id,
+              this.token,
+              response.usuario,
+              this.menu
+            );
+          }
+          return true;
+        },
 
-        Swal.fire({
-          title: 'Usuario actualizado!',
-          icon: 'success',
-        });
-
-        return true;
-      })
+        catchError((error) => {
+          return throwError(error);
+        })
+      )
     );
   }
 
@@ -142,7 +177,7 @@ export class UsuarioService {
         });
 
         this.usuario.img = response.usuario.img;
-        this.guardarStorage(id, this.token, this.usuario);
+        this.guardarStorage(id, this.token, this.usuario, this.menu);
       })
       .catch((error) => {
         console.log(error);

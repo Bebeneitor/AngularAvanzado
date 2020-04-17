@@ -5,6 +5,8 @@ import { UrlSegment } from '@angular/router';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Hospital } from 'src/app/models/hospital.model';
 import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs/internal/Observable';
+import { catchError } from 'rxjs/internal/operators/catchError';
 
 @Injectable({
   providedIn: 'root',

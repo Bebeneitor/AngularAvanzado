@@ -5,17 +5,17 @@ import { retry, map, filter } from 'rxjs/operators';
 @Component({
   selector: 'app-rxjs',
   templateUrl: './rxjs.component.html',
-  styles: []
+  styles: [],
 })
 export class RxjsComponent implements OnInit, OnDestroy {
   suscription: Subscription;
 
   constructor() {
     this.suscription = this.regresaObservable().subscribe(
-      numero => {
+      (numero) => {
         console.log(numero);
       },
-      error => {
+      (error) => {
         console.log(error);
       },
       () => {
@@ -37,7 +37,7 @@ export class RxjsComponent implements OnInit, OnDestroy {
         contador += 1;
 
         const salida = {
-          valor: contador
+          valor: contador,
         };
 
         observer.next(salida);
@@ -53,7 +53,7 @@ export class RxjsComponent implements OnInit, OnDestroy {
         // }
       }, 1000);
     }).pipe(
-      map(resp => resp.valor),
+      map((resp) => resp.valor),
       filter((valor, index) => {
         if (valor % 2 === 1) {
           // Impar

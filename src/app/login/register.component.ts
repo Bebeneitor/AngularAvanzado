@@ -57,7 +57,6 @@ export class RegisterComponent implements OnInit {
       });
 
       console.log('terminos y condicones');
-
       return;
     }
     const usuario = new Usuario(
@@ -65,9 +64,17 @@ export class RegisterComponent implements OnInit {
       this.forma.value.email,
       this.forma.value.password
     );
-    this._usuarioService
-      .crearUsuario(usuario)
-      .subscribe((response) => this.router.navigate(['/login']));
+    this._usuarioService.crearUsuario(usuario).subscribe(
+      (response) => this.router.navigate(['/login']),
+      (error) => {
+        Swal.fire({
+          title: error.error.message,
+          text: error.error.errors.message,
+          icon: 'error',
+        });
+        console.log(error);
+      }
+    );
   }
 
   sonIguales(campo1: string, campo2: string) {

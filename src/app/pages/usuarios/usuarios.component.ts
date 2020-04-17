@@ -96,7 +96,21 @@ export class UsuariosComponent implements OnInit {
   }
 
   actualizarUsuario(usuario: Usuario) {
-    this._usuarioService.actualizarUsuario(usuario).subscribe();
+    this._usuarioService.actualizarUsuario(usuario).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Usuario actualizado!',
+          icon: 'success',
+        });
+      },
+      (error) => {
+        Swal.fire({
+          title: error.error.message,
+          text: error.error.errors.message,
+          icon: 'error',
+        });
+      }
+    );
   }
 
   mostarModal(usuario: Usuario) {
