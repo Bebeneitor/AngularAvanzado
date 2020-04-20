@@ -7,6 +7,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { RouterModule } from '@angular/router';
 import { PipesModule } from '../pipes/pipes.module';
+import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 
 @NgModule({
   declarations: [
@@ -14,12 +15,14 @@ import { PipesModule } from '../pipes/pipes.module';
     HeaderComponent,
     SidebarComponent,
     NopagefoundComponent,
+    ModalUploadComponent,
   ],
   exports: [
     BreadcrumbsComponent,
     HeaderComponent,
     SidebarComponent,
     NopagefoundComponent,
+    ModalUploadComponent,
   ],
   imports: [RouterModule, CommonModule, PipesModule],
 })

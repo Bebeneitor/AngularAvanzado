@@ -25,6 +25,32 @@ export class UsuarioService {
     this.cargandoStorage();
   }
 
+  renuevaToken() {
+    let URL = URL_SERVICIOS + '/login/renovartoken';
+    URL += '?token=' + this.token;
+    console.log('URL', URL);
+
+    return this.http.get(URL).pipe(
+      map(
+        (response: any) => {
+          this.token = response.token;
+          localStorage.setItem('token', this.token);
+          return true;
+        },
+        catchError((error) => {
+          Swal.fire({
+            title: 'Sesion expirada!',
+            text: 'Favor de iniciar sesion nuevamnete',
+            icon: 'info',
+          });
+
+          this.logOut();
+          return throwError(error);
+        })
+      )
+    );
+  }
+
   estaLogueado() {
     if (this.token && this.token.length > 5) {
       return true;

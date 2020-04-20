@@ -7,13 +7,14 @@ import {
   SettingsService,
   SharedService,
   SidebarService,
-  LoginGuardGuard,
   UsuarioService,
   SubirArchivoService,
   HospitalService,
   MedicoService,
-  AdminGuard,
   BusquedaService,
+  AdminGuard,
+  LoginGuardGuard,
+  VarificarTokenGuard,
 } from './service.index';
 
 @NgModule({
@@ -30,6 +31,7 @@ import {
     HospitalService,
     MedicoService,
     BusquedaService,
+    VarificarTokenGuard,
   ],
   imports: [CommonModule, HttpClientModule],
 })
